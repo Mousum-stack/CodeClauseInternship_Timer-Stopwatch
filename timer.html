@@ -1,0 +1,122 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Timer & Stopwatch</title>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Lato&family=Martian+Mono:wght@800&family=Merienda:wght@400;700&family=Poppins:wght@400;500;600&family=Roboto:ital@1&display=swap');
+ body {
+    font-family: 'Arial', sans-serif;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    height: 100vh;
+    background-color: #040404;
+    margin: 0;
+    padding: 0;
+}
+
+h2 {
+    color: #05f0f8;
+    text-shadow: 2px 2px 4px rgba(0, 96, 100, 0.2);
+    font-family: 'Martian Mono', monospace;
+    font-size: 25px;
+}
+
+#display {
+    font-size: 48px;
+    color: #00796b;
+    border: 2px solid #009688;
+    padding: 10px 20px;
+    border-radius: 8px;
+    background-color: #e0f2f1;
+    margin-bottom: 20px;
+    text-shadow: 2px 2px 4px rgba(0, 121, 107, 0.2);
+}
+
+#controls {
+    display: flex;
+    gap: 15px;
+}
+
+img {
+    cursor: pointer;
+    width: 50px;
+    height: 50px;
+    transition: 0.2s transform ease-in-out;
+}
+
+img:hover {
+    transform: scale(1.1);
+}
+
+    </style>
+</head>
+<body>
+
+<h2>Stopwatch</h2>
+<div id="display">00:00:00</div>
+<div id="controls">
+    <img id="stop" src="images/stop.png" onclick="stopStopwatch()">
+    <img src="images/reset.png" onclick="resetStopwatch()">
+    <img src="images/start.png" onclick="startStopwatch()">
+</div>
+
+<script>
+    let interval;
+    let started = false;
+    let ms = 0, seconds = 0, minutes = 0, hours = 0;
+
+    function startStopwatch() {
+        if (!started) {
+            started = true;
+            interval = setInterval(updateStopwatch, 10); // Update every 10 milliseconds
+        }
+    }
+
+    function stopStopwatch() {
+        if (started) {
+            clearInterval(interval);
+            started = false;
+        }
+    }
+
+    function resetStopwatch() {
+        stopStopwatch();
+        ms = 0;
+        seconds = 0;
+        minutes = 0;
+        hours = 0;
+        displayTime();
+    }
+
+    function updateStopwatch() {
+        ms += 10; // Increment by 10 ms
+        if (ms >= 1000) {
+            ms = 0;
+            seconds++;
+            if (seconds >= 60) {
+                seconds = 0;
+                minutes++;
+                if (minutes >= 60) {
+                    minutes = 0;
+                    hours++;
+                }
+            }
+        }
+        displayTime();
+    }
+
+    function displayTime() {
+        const formattedTime = (hours < 10 ? "0" + hours : hours) + ":" + 
+                              (minutes < 10 ? "0" + minutes : minutes) + ":" + 
+                              (seconds < 10 ? "0" + seconds : seconds) + "." + 
+                              (ms < 10 ? "00" + ms : ms < 100 ? "0" + ms : ms);
+        document.getElementById("display").textContent = formattedTime;
+    }
+</script>
+
+</body>
+</html>
